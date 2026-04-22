@@ -6,20 +6,23 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 public class Ai_Nav_Script : MonoBehaviour
 {
     public GameObject bin; // the bin that the ai brings the trash back to
     public NavMeshAgent agent; // the ai nav mesh agent
 
-    public bool goingToBin; // a bool for when the ai is going back to tht bin
-    public bool goingToTrash;
+    public bool goingToBin; // a bool for when the ai is going back to the bin
+    public bool goingToTrash; // a bool for when the ai is going to find trash
 
-    public GameObject lastTrash;
+    public GameObject lastTrash; // the last piece of trash touched
 
-    private List<GameObject> trashList = new List<GameObject>();
+    private List<GameObject> trashList = new List<GameObject>(); // a list containing all of the spawned trash
 
-    public float binDistance;
+    public float lowestDistance; // the lowest distance to trash
+    public GameObject trashWithLowestDistance; // the trash that has the lowest distance
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,29 +37,44 @@ public class Ai_Nav_Script : MonoBehaviour
             agent.destination = bin.transform.position; // navigate to the bin's possition
         }
 
-        else if (goingToTrash == true)
+        else if (goingToTrash == true) // when it should go to the closest trash
         {
-
+            agent.destination = trashWithLowestDistance.transform.position; // navigate to the closest trash's position
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Bin")
+        if (collision.gameObject.tag == "Bin") // if it touches the bin
         {
             Debug.Log("Bin");
             goingToBin = false;
+            Destroy(lastTrash);
             SearchForTrash();
         }
-        else if (collision.gameObject.tag == "trash")
+        else if (collision.gameObject.tag == "trash") // if it touches the trash
         {
-            lastTrash = collision.gameObject;
-            lastTrash.transform.position = this.transform.GetChild(0).transform.position;
-            goingToBin = true;
+            lastTrash = collision.gameObject; // set the trash touched to last trash
+            lastTrash.transform.position = this.transform.GetChild(0).transform.position; //  move the trash object to the front of the ai
+            goingToBin = true; // start going to the bin
         }
     }
 
-    void SearchForTrash()
+    void SearchForTrash() // look for the closest trash in the trash list
     {
-
+        for (int i = 0; i < trashList.Count; i++)
+        {
+            
+            if (i == 0)
+            {
+                lowestDistance = Vector3.Distance(this.transform.position, trashList[i].transform.position);
+                trashWithLowestDistance = trashList[i];
+            }
+            else if (i > 0 && Vector3.Distance(this.transform.position, trashList[i].transform.position) < lowestDistance)
+            {
+                lowestDistance = Vector3.Distance(this.transform.position, trashList[i].transform.position);
+                trashWithLowestDistance = trashList[i];
+            }
+        }
+        goingToTrash = true;
     }
 }
