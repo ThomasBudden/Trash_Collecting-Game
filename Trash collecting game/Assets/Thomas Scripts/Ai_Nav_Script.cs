@@ -10,6 +10,8 @@ using Unity.VisualScripting;
 
 public class Ai_Nav_Script : MonoBehaviour
 {
+    public GameObject spawningManager;
+
     public GameObject bin; // the bin that the ai brings the trash back to
     public NavMeshAgent agent; // the ai nav mesh agent
 
@@ -27,6 +29,7 @@ public class Ai_Nav_Script : MonoBehaviour
     void Start()
     {
         agent = this.GetComponent<NavMeshAgent>(); // sets agent to the ai's nav mesh agent
+        SearchForTrash();
     }
 
     // Update is called once per frame
@@ -61,6 +64,7 @@ public class Ai_Nav_Script : MonoBehaviour
 
     void SearchForTrash() // look for the closest trash in the trash list
     {
+        trashList = spawningManager.GetComponent<RandomSpawingTrash>().trashList;
         for (int i = 0; i < trashList.Count; i++)
         {
             
