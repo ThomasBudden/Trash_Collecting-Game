@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class RandomSpawingTrash : MonoBehaviour
 {
-    public GameObject[] trashObjects; //array 
-    public GameObject trashObject; //singular object
+    public GameObject trashPrefab;
 
-    void Awake()
+
+    private void FixedUpdate()
     {
-        while (trashObject)
-        {
-            Vector3 position = new Vector3(Random.Range(-100.0f, 100.0f), 0, Random.Range(-100.0f, 100.0f)); //Picks a random place in scene to spawn the trash from
-            Instantiate(trashObject, position, Quaternion.identity); // makes the object spawn in scene 
-            Debug.Log("Do you spawn?"); 
-        }
+        //Spawing Positions
+        int spawnPointX = Random.Range(0, 0);
+        int spawnPointY = Random.Range(0, 30);
+        int spawnPointZ = Random.Range(0, 20);
+
+        //creates the spawnposition 
+        Vector3 spawnPosition = new Vector3(spawnPointZ, spawnPointX, spawnPointY);
+        //spawns the objects 
+        Instantiate(trashPrefab, spawnPosition, Quaternion.identity);
     }
 }
