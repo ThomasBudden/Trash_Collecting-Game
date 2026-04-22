@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic; 
 
 public class RandomSpawingTrash : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class RandomSpawingTrash : MonoBehaviour
     public GameObject trashPrefab;
     public int maxTrash = 20;
     [SerializeField] private int currentTrash = 0;
+    public List <GameObject> trashList;
 
     [Header("Timer settings")]
     public float spawnInterval = 1f;
@@ -29,7 +31,10 @@ public class RandomSpawingTrash : MonoBehaviour
             //creates the spawnposition 
             Vector3 spawnPosition = new Vector3(spawnPointZ, spawnPointX, spawnPointY);
             //spawns the objects 
-            Instantiate(trashPrefab, spawnPosition, Quaternion.identity);
+            GameObject spawnedTrash = Instantiate(trashPrefab, spawnPosition, Quaternion.identity);
+
+            // add to list
+            trashList.Add(spawnedTrash);
 
             currentTrash++; //add spawned trash to the current trash
         }
