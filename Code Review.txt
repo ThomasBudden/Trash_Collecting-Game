@@ -1,0 +1,94 @@
+﻿Flowchart 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Script - Ai_Nav_Script
+	
+
+	AiNavScript variables are all public when none need to be
+	Change these to private with [SerialiseField]
+
+
+	The nav mesh agent tries to navigate to trash before it has been spawned.
+	Set it to null in start and create an if statement at the point where it is set to try to navigate to the trash checking if it is null. If it is null, make it search for trash again.
+The if statement in update could be moved to methods that run after the agent detects a collision.
+The ai does n
+	The ai does not detect collisions when colliding with the trash objects. 
+	
+
+	Checking for the collisions tags with if(tag== “tag”)
+	Use CompareTag instead
+	The statement checking the tags has the tag for trash as “trash” not “Trash”
+	Change it to Trash
+	
+
+
+
+
+
+Script - RandomTrashSpawning.cs 
+	For variables under [Header("Trash settings")] 
+	Ignore list needs to be public for the AiNavScript.cs 
+	Nitpick: to help clean up code use [SerializeField] private  
+	Script - RandomTrashSpawning.cs 
+	Line 13 
+	Nitpick: to help clean up code use [SerializeField] private  
+	Script - RandomTrashSpawning.cs 
+	Line 13
+	Suggestion: remove the hard set number and set it in inspector instead 
+	Script - RandomTrashSpawning.cs 
+	Line 14
+	Nitpick: to help clean up code use a _ before timer 
+	Script - RandomTrashSpawning.cs 
+	Question: would this code work as well inside of another method than FixedUpdate?
