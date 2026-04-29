@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.AI;
 using Unity.VisualScripting;
+using NUnit.Framework;
+using TMPro;
+using UnityEngine.UI;
 
 public class Ai_Nav_Script : MonoBehaviour
 {
@@ -29,6 +32,7 @@ public class Ai_Nav_Script : MonoBehaviour
     void Start()
     {
         agent = this.GetComponent<NavMeshAgent>(); // sets agent to the ai's nav mesh agent
+        trashWithLowestDistance = null;
         SearchForTrash();
     }
 
@@ -42,7 +46,15 @@ public class Ai_Nav_Script : MonoBehaviour
 
         else if (goingToTrash == true) // when it should go to the closest trash
         {
-            agent.destination = trashWithLowestDistance.transform.position; // navigate to the closest trash's position
+            if (trashWithLowestDistance == null)
+            {
+                agent.destination = this.transform.position;
+                SearchForTrash();
+            }
+            else if (trashWithLowestDistance != null)
+            {
+                agent.destination = trashWithLowestDistance.transform.position; // navigate to the closest trash's position
+            }
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -51,13 +63,20 @@ public class Ai_Nav_Script : MonoBehaviour
         {
             Debug.Log("Bin");
             goingToBin = false;
+            trashList.Remove(lastTrash);
             Destroy(lastTrash);
+            lastTrash = null;
+            trashWithLowestDistance = null;
             SearchForTrash();
         }
-        else if (collision.gameObject.tag == "trash") // if it touches the trash
+        else if (collision.gameObject.tag == "Trash") // if it touches the trash
         {
+            Debug.Log("Trash");
             lastTrash = collision.gameObject; // set the trash touched to last trash
             lastTrash.transform.position = this.transform.GetChild(0).transform.position; //  move the trash object to the front of the ai
+            lastTrash.transform.SetParent(this.transform.GetChild(0));
+            Destroy(lastTrash.GetComponent<Rigidbody>());
+
             goingToBin = true; // start going to the bin
         }
     }
