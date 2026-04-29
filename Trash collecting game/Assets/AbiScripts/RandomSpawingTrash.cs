@@ -4,13 +4,13 @@ using System.Collections.Generic;
 public class RandomSpawingTrash : MonoBehaviour
 {
     [Header("Trash settings")]
-    public GameObject trashPrefab;
-    public int maxTrash = 20;
+    [SerializeField] private GameObject trashPrefab;
+    [SerializeField] private int maxTrash = 20;
     [SerializeField] private int currentTrash = 0;
-    public List <GameObject> trashList;
+    public List <GameObject> trashList; // public for the AI Nav Script 
 
     [Header("Timer settings")]
-    public float spawnInterval = 1f;
+    [SerializeField] private float spawnInterval = 1f;
     private float timer; 
 
     private void FixedUpdate()
