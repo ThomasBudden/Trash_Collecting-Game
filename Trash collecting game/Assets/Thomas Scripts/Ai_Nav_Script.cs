@@ -46,12 +46,12 @@ public class Ai_Nav_Script : MonoBehaviour
 
         else if (goingToTrash == true) // when it should go to the closest trash
         {
-            if (trashWithLowestDistance == null)
+            if (trashWithLowestDistance == null) // if the trash has not been set
             {
-                agent.destination = this.transform.position;
+                agent.destination = this.transform.position; // search for the trash
                 SearchForTrash();
             }
-            else if (trashWithLowestDistance != null)
+            else if (trashWithLowestDistance != null) // if trash has been found
             {
                 agent.destination = trashWithLowestDistance.transform.position; // navigate to the closest trash's position
             }
@@ -62,8 +62,8 @@ public class Ai_Nav_Script : MonoBehaviour
         if (collision.gameObject.tag == "Bin") // if it touches the bin
         {
             Debug.Log("Bin");
-            goingToBin = false;
-            trashList.Remove(lastTrash);
+            goingToBin = false; // it is no longer going to a bin
+            trashList.Remove(lastTrash); // remove the trash from the list
             Destroy(lastTrash);
             lastTrash = null;
             trashWithLowestDistance = null;
@@ -84,20 +84,20 @@ public class Ai_Nav_Script : MonoBehaviour
     void SearchForTrash() // look for the closest trash in the trash list
     {
         trashList = spawningManager.GetComponent<RandomSpawingTrash>().trashList;
-        for (int i = 0; i < trashList.Count; i++)
+        for (int i = 0; i < trashList.Count; i++) // the the number of trash
         {
             
-            if (i == 0)
+            if (i == 0) // if it is on the first trash in the list set that one to be the closest
             {
                 lowestDistance = Vector3.Distance(this.transform.position, trashList[i].transform.position);
                 trashWithLowestDistance = trashList[i];
             }
-            else if (i > 0 && Vector3.Distance(this.transform.position, trashList[i].transform.position) < lowestDistance)
+            else if (i > 0 && Vector3.Distance(this.transform.position, trashList[i].transform.position) < lowestDistance) // if it is not the first one and it is closer than the first one, set it to be the new closest one
             {
                 lowestDistance = Vector3.Distance(this.transform.position, trashList[i].transform.position);
                 trashWithLowestDistance = trashList[i];
             }
         }
-        goingToTrash = true;
+        goingToTrash = true; // it is going to trash
     }
 }
